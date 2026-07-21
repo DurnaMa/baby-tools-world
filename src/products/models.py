@@ -21,15 +21,18 @@ class Category(models.Model):
         ordering = ["name"]
         verbose_name_plural = "Categories"
 
-#NEW Tags
+
+# NEW Tags
 class Tag(models.Model):
 
     name = models.CharField(max_length=50, blank=False, null=False)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
-    def __str__(self):
+    def __str__(self) -> str:
+        """Return the tag name for display."""
         return self.name
+
 
 class Product(models.Model):
 
