@@ -1,5 +1,8 @@
-from django.core.management.base import BaseCommand
+import shutil
 
+from pathlib import Path
+from django.conf import settings
+from django.core.management.base import BaseCommand
 from products.models import Category, Product
 
 categories_list = [("boys", "", "boys"), ("girls", "", "girls"), ("toys", "", "toys"), ("outdoor", "", "outdoor")]
@@ -141,6 +144,9 @@ class Command(BaseCommand):
 
         # Create products
         created_products = 0
+        quelle = Path(settings.STATICFILES_DIRS[0]) / "imgs" / "products"
+        ziel = Path(settings.MEDIA_ROOT) / "imgs" / "products"
+        shutil.copytree(quelle, ziel, dirs_exist_ok=True)
 
         try:
             for product in products:
