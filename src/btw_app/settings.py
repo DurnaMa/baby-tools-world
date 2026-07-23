@@ -148,3 +148,7 @@ MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 # https://docs.djangoproject.com/en/6.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+# CSRF / Proxy settings for HTTPS behind nginx reverse proxy
+CSRF_TRUSTED_ORIGINS = ["https://your-server-ip:8000"]
+SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
