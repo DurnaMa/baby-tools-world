@@ -65,7 +65,7 @@ def product_detail(request, category_slug, pk):
             existing = product.comments.filter(user=request.user).first()
             if existing:
                 initial = {"rating": existing.rating, "text": existing.text}
-        form = CommentForm(initial=initial)
+        form = CommentForm()
 
     return render(
         request,
