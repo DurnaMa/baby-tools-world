@@ -150,5 +150,5 @@ MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 # CSRF / Proxy settings for HTTPS behind nginx reverse proxy
-CSRF_TRUSTED_ORIGINS = [os.getenv("CSRF_TRUSTED_ORIGIN")]
-SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
+origin = os.getenv("CSRF_TRUSTED_ORIGIN")
+CSRF_TRUSTED_ORIGINS = [origin] if origin else []
