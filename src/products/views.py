@@ -33,6 +33,7 @@ def product_detail(request, category_slug, pk):
     )
 
     comments = product.comments.select_related("user").order_by("-created_at")
+    already_reviewed = request.user.is_authenticated and product.comments.filter(user=request.user).exists()
 
     if request.method == "POST":
         form = CommentForm(request.POST, initial={"user": request.user if request.user.is_authenticated else None})
@@ -41,15 +42,14 @@ def product_detail(request, category_slug, pk):
             text = form.cleaned_data.get("text", "")
 
             if request.user.is_authenticated:
-                # Upsert: update existing comment or create a new one
+                # Create review only if the user has not reviewed yet
                 comment, created = Comment.objects.get_or_create(
                     product=product, user=request.user, defaults={"rating": rating, "text": text}
                 )
-                if not created:
-                    comment.rating = rating
-                    comment.text = text
-                    comment.save()
-                messages.success(request, "Your rating was {}.".format("submitted" if created else "updated"))
+                if created:
+                    messages.success(request, "Thank you for your rating.")
+                else:
+                    messages.error(request, "You have already reviewed this product.")
             else:
                 # Guest: create a new comment (no uniqueness constraint)
                 comment = form.save(commit=False)
@@ -59,16 +59,16 @@ def product_detail(request, category_slug, pk):
 
             return redirect("product_detail", category_slug=category_slug, pk=product.pk)
     else:
-        # Pre-fill form for authenticated user with existing comment (if any)
-        initial = {}
-        if request.user.is_authenticated:
-            existing = product.comments.filter(user=request.user).first()
-            if existing:
-                initial = {"rating": existing.rating, "text": existing.text}
         form = CommentForm()
 
     return render(
         request,
         "product.html",
-        {"product": product, "comments": comments, "related_products": related_products, "form": form},
+        {
+            "product": product,
+            "comments": comments,
+            "related_products": related_products,
+            "form": form,
+            "already_reviewed": already_reviewed,
+        },
     )
