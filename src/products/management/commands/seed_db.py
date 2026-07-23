@@ -4,7 +4,7 @@ from pathlib import Path
 from django.conf import settings
 from django.core.management.base import BaseCommand
 
-from products.models import Category, Product
+from products.models import Category, Product, Tag
 
 categories_list = [("boys", "", "boys"), ("girls", "", "girls"), ("toys", "", "toys"), ("outdoor", "", "outdoor")]
 products = [
@@ -14,6 +14,7 @@ products = [
         "name": "jumpsuit-blue-01",
         "price": 9.99,
         "image": "imgs/products/jumpsuit-blue.jpeg",
+        "tags": [],
     },
     {
         "category": "boys",
@@ -21,6 +22,7 @@ products = [
         "name": "pacifier-blue",
         "price": 1.99,
         "image": "imgs/products/blue-pacifier.jpeg",
+        "tags": [],
     },
     {
         "category": "boys",
@@ -28,6 +30,7 @@ products = [
         "name": "wooden-sword-sir-babylot",
         "price": 22.99,
         "image": "imgs/products/wooden-sword.png",
+        "tags": [],
     },
     {
         "category": "girls",
@@ -35,6 +38,7 @@ products = [
         "name": "jumpsuit-pink-01",
         "price": 9.99,
         "image": "imgs/products/jumpsuit-rosa.jpeg",
+        "tags": [],
     },
     {
         "category": "girls",
@@ -42,6 +46,7 @@ products = [
         "name": "pacifier-pink",
         "price": 1.99,
         "image": "imgs/products/rosa-pacifier.jpeg",
+        "tags": [],
     },
     {
         "category": "girls",
@@ -49,6 +54,7 @@ products = [
         "name": "cuddly-dolphin",
         "price": 17.49,
         "image": "imgs/products/cuddly-dolphin.png",
+        "tags": [],
     },
     {
         "category": "toys",
@@ -56,6 +62,7 @@ products = [
         "name": "kids-kitchen-le-chef",
         "price": 45.99,
         "image": "imgs/products/blue-kitchen.png",
+        "tags": [],
     },
     {
         "category": "toys",
@@ -63,6 +70,7 @@ products = [
         "name": "kids-kitchen-le-bakery (rosa)",
         "price": 49.99,
         "image": "imgs/products/rosa-kitchen.png",
+        "tags": [],
     },
     {
         "category": "toys",
@@ -70,6 +78,7 @@ products = [
         "name": "soft-ball",
         "price": 10.00,
         "image": "imgs/products/baby-ball.png",
+        "tags": [],
     },
     {
         "category": "toys",
@@ -77,6 +86,7 @@ products = [
         "name": "rattle-blue",
         "price": 11.00,
         "image": "imgs/products/blue-rattle.png",
+        "tags": [],
     },
     {
         "category": "toys",
@@ -84,6 +94,7 @@ products = [
         "name": "rattle-rosa",
         "price": 11.00,
         "image": "imgs/products/rosa-rattle.png",
+        "tags": [],
     },
     {
         "category": "toys",
@@ -91,6 +102,7 @@ products = [
         "name": "wooden-horse",
         "price": 22.98,
         "image": "imgs/products/wooden-horse.png",
+        "tags": [],
     },
     {
         "category": "outdoor",
@@ -98,6 +110,7 @@ products = [
         "name": "sun-cream-baby-strong",
         "price": 0.99,
         "image": "imgs/products/baby-suncream.png",
+        "tags": [],
     },
     {
         "category": "outdoor",
@@ -105,6 +118,7 @@ products = [
         "name": "sun-hat",
         "price": 4.99,
         "image": "imgs/products/baby-sunhat.png",
+        "tags": [],
     },
     {
         "category": "outdoor",
@@ -112,6 +126,7 @@ products = [
         "name": "baby-bottle",
         "price": 8.99,
         "image": "imgs/products/baby-bottle.png",
+        "tags": [],
     },
 ]
 
@@ -176,6 +191,10 @@ class Command(BaseCommand):
                 )
                 created_products += 1
                 self.stdout.write(self.style.SUCCESS(f"Created product: {new_product.name}"))
+
+                for tag_name in product["tags"]:
+                    tag, created = Tag.objects.get_or_create(name=tag_name)
+                    new_product.tags.add(tag)
 
             self.stdout.write(self.style.SUCCESS(f"{created_products} Products created successfully."))
 
