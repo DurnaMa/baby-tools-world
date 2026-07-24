@@ -22,9 +22,22 @@ class Category(models.Model):
         verbose_name_plural = "Categories"
 
 
+# NEW Tags
+class Tag(models.Model):
+
+    name = models.CharField(max_length=50, blank=False, null=False)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self) -> str:
+        """Return the tag name for display."""
+        return self.name
+
+
 class Product(models.Model):
 
     category = models.ForeignKey(Category, null=True, on_delete=models.DO_NOTHING)
+    tags = models.ManyToManyField(Tag, blank=True)
     description = models.TextField(max_length=250, null=True, blank=True)
     image = models.ImageField(upload_to="imgs/products/", null=True, blank=True)
     name = models.CharField(max_length=80, blank=False, null=False)

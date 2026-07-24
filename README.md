@@ -46,7 +46,7 @@ In order to quickly get started with the project follow these steps:
 
 The project is modularized into several apps:
 
-- `products`: Manages product listings and categories
+- `products`: Manages product listings, categories and tags
 - `users`: Handles user authentication and registration.
 
 Each app has its own `models.py`, `views.py`, `urls.py`, and `admin.py` files to encapsulate its functionality.
@@ -54,6 +54,18 @@ Each app has its own `models.py`, `views.py`, `urls.py`, and `admin.py` files to
 ## Usage
 
 In this section you can read about the project a bit more in detail.
+
+### Product Tags
+
+Products can be labeled with tags to group them across categories.
+Tags are managed in the Django admin panel:
+
+1. Open `localhost:8000/admin` and log in.
+2. Create tags under the "Tags" section.
+3. Open a product and assign one or more tags, then save.
+
+Assigned tags are shown on the product detail page above the buy button.
+Products without tags display "no tags available".
 
 ### Configuration
 
